@@ -57,6 +57,7 @@ export default class Video extends BaseModel {
     })
     await video.save()
     await MediaService.readDataPoints(video)
+    await video.load('dataPoints')
   }
 
   @belongsTo(() => File) public file: BelongsTo<typeof File>
