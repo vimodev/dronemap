@@ -34,7 +34,6 @@ export default class FileService {
    * adds new entries
    */
   public static async synchronizeFileDatabase() {
-    console.log("x")
     let databaseFiles = await File.all()
     // First go over all files in database to see if they are correct
     for (const file of databaseFiles) {
@@ -56,8 +55,6 @@ export default class FileService {
     }
     // Now add all missing files to the database
     let systemFiles = FileService.getFiles('', [])
-    console.log(systemFiles)
-    console.log("x")
     for (const file of systemFiles) {
       let find = await File.findBy('filePath', file)
       if (find == null) {

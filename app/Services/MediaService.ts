@@ -4,6 +4,8 @@ import os from 'os'
 import fs from 'fs'
 import path from 'path'
 import ffmpeg from 'fluent-ffmpeg'
+import VideoDataPoint from "App/Models/VideoDataPoint";
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class MediaService {
 
@@ -29,6 +31,27 @@ export default class MediaService {
     let video = new Video()
     await video.related('file').associate(file)
     await video.save()
+  }
+
+  public static async thumbnail(point: VideoDataPoint, http: HttpContextContract) {
+    await point.load('video')
+    await point.video.load('file')
+    const tmpDir = fs.mkdtempSync(`${os.tmpdir()}${path.sep}`)
+    await new Promise((resolve) => {
+      console.log("Thumbnail generated: " + tmpDir + path.sep + point.id)
+      ffmpeg(process.env.FILE_ROOT + point.video.file.filePath)
+        .screenshots({
+          timestamps: [point.startSeconds],
+          filename: point.id + '.png',
+          folder: tmpDir,
+          size: '320x240',
+        })
+        .on('end', function() {
+          resolve(true)
+        })
+    })
+    let thumbnail = fs.createReadStream(tmpDir + path.sep + point.id + '.png')
+    http.response.stream(thumbnail)
   }
 
   public static async readDataPoints(video: Video) {

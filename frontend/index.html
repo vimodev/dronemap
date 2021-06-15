@@ -30,10 +30,7 @@
               marker.res_width = video.resolution_width
               marker.res_height = video.resolution_height
 							marker.events.register("click", marker, function(mark) {
-                window.open("point.html?point=" + mark.object.id, 'Info', 'width=700, height=500')
-                // width = Math.max(window.screen.availWidth * 0.8, mark.object.res_width)
-                // height = Math.max(window.screen.availHeight * 0.8, mark.object.res_height)
-								// window.open("video.html?video=" + mark.object.videoId + "&time=" + mark.object.time, 'Video',`width=${width}, height=${height}`)
+                window.open("point.html?point=" + mark.object.id, 'Info', 'width=1000, height=1000')
 							})
 							markers.addMarker(marker)
               map.setCenter(marker.lonlat, 15)

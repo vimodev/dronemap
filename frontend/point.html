@@ -34,6 +34,10 @@
         link.innerHTML = "Open in video stream"
         link.href = "video.html?video=" + info.video_id + "&time=" + info.start_seconds
         document.body.appendChild(link)
+        document.body.appendChild(document.createElement("br"))
+        const img = document.createElement("img")
+        img.src = "http://localhost:3333/api/datapoints/" + info.id + "/thumbnail"
+        document.body.appendChild(img)
       })
 	</script>
   </body>

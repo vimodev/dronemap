@@ -26,6 +26,7 @@ import File from 'App/Models/File'
 import VideoDataPoint from 'App/Models/VideoDataPoint'
 import fs from 'fs'
 import path from 'path'
+import MediaService from 'App/Services/MediaService'
 
 Route.group(() => {
 
@@ -59,6 +60,7 @@ Route.group(() => {
     Route.group(() => {
       // Get datapoint object
       Route.get('', async ({params}: HttpContextContract) => await VideoDataPoint.find(params.datapointId))
+      Route.get('/thumbnail', async(http: HttpContextContract) => await MediaService.thumbnail(await VideoDataPoint.findOrFail(http.params.datapointId), http))
     }).prefix('/:datapointId')
     Route.get('', async () => await VideoDataPoint.all())
   }).prefix('/datapoints')
