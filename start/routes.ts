@@ -28,3 +28,5 @@ Route.get('/', async () => {
 Route.get('/test', async () => {
   await FileService.synchronizeFileDatabase()
 })
+
+Route.get('/video/:videoId', 'VideosController.stream')

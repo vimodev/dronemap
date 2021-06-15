@@ -4,7 +4,6 @@ import os from 'os'
 import fs from 'fs'
 import path from 'path'
 import ffmpeg from 'fluent-ffmpeg'
-import VideoDataPoint from "App/Models/VideoDataPoint";
 
 export default class MediaService {
 
