@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<title>OpenLayers Simplest Example</title>
+<div id="demoMap" style="height:98vh;"></div>
+<script src="openlayers/OpenLayers.js"></script>
+<script>
+    map = new OpenLayers.Map("demoMap");
+    map.addLayer(new OpenLayers.Layer.OSM());
+	var markers = new OpenLayers.Layer.Markers( "Markers" );
+    map.addLayer(markers);
+	var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+    var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+	
+	fetch("http://localhost:3333/api/videos")
+		.then(function (response) {
+			return response.json()
+		})
+		.then(function (videos) {
+			videos.forEach((video) => {
+				fetch("http://localhost:3333/api/videos/" + video.id + "/datapoints")
+					.then(function (res) {
+						return res.json()
+					})
+					.then(function (points) {
+						points.forEach((p) => {
+							//console.log(p)
+							marker = new OpenLayers.Marker(new OpenLayers.LonLat(p.gps_longitude, p.gps_lattitude).transform(fromProjection, toProjection))
+							marker.id = p.id
+							marker.videoId = p.video_id
+							marker.time = p.start_seconds
+							marker.events.register("click", marker, function(mark) {
+								window.open("video.html?video=" + mark.object.videoId + "&time=" + mark.object.time, "_blank")
+							})
+							markers.addMarker(marker)
+							map.setCenter(marker.lonlat, 15)
+						})
+					})
+			})
+			//map.zoomToMaxExtent();
+		})
+	
+</script>

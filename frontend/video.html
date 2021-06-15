@@ -1,0 +1,18 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTTP Video Stream</title>
+  </head>
+  <body>
+    <video id="videoPlayer" height="100%" controls muted="muted" autoplay>
+      <source id="videoSource" src="" type="video/mp4" />
+    </video>
+	<script>
+		const urlParams = new URLSearchParams(window.location.search)
+		const videoId = urlParams.get("video")
+		document.getElementById("videoSource").src = "http://localhost:3333/api/videos/" + videoId + "/stream"
+		document.getElementById("videoPlayer").currentTime = Math.floor(urlParams.get("time"))
+	</script>
+  </body>
+</html>

@@ -24,8 +24,13 @@ import FileService from 'App/Services/FileService'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import File from 'App/Models/File'
 import VideoDataPoint from 'App/Models/VideoDataPoint'
+import fs from 'fs'
+import path from 'path'
 
 Route.group(() => {
+
+  // Start syncing
+  Route.get('/sync', async () => await FileService.synchronizeFileDatabase())
 
   // Video stuff
   Route.group(() => {
@@ -37,6 +42,7 @@ Route.group(() => {
       // Get data points
       Route.get('/datapoints', async ({params}: HttpContextContract) => await VideoDataPoint.query().where('videoId', params.videoId).orderBy('sequenceNumber', 'asc'))
     }).prefix('/:videoId')
+    Route.get('', async () => await Video.all())
   }).prefix('/videos')
 
   // File stuff
@@ -45,8 +51,7 @@ Route.group(() => {
       // Get file object
       Route.get('', async ({params}: HttpContextContract) => await File.find(params.fileId))
     }).prefix('/:fileId')
-    // Start syncing
-    Route.get('/sync', async () => await FileService.synchronizeFileDatabase())
+    Route.get('', async () => await File.all())
   }).prefix('/files')
 
   // Datapoints
@@ -55,6 +60,13 @@ Route.group(() => {
       // Get datapoint object
       Route.get('', async ({params}: HttpContextContract) => await VideoDataPoint.find(params.datapointId))
     }).prefix('/:datapointId')
+    Route.get('', async () => await VideoDataPoint.all())
   }).prefix('/datapoints')
 
 }).prefix('/api')
+
+Route.group(() => {
+  Route.get('/home', async () => {
+    return fs.readFileSync(`frontend${path.sep}index.html`).toString()
+  })
+}).prefix('/page')

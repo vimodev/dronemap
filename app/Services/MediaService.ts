@@ -25,6 +25,7 @@ export default class MediaService {
   }
 
   public static async handleNewVideo(file: File) {
+    console.log("Handling " + file.filePath)
     let video = new Video()
     await video.related('file').associate(file)
     await video.save()
