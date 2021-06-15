@@ -15,9 +15,9 @@ export default class MediaService {
     let split = file.filePath.split('.')
     let extension = split[split.length - 1]
     if (MediaService.IMAGE_EXTENSIONS.includes(extension.toLowerCase())) {
-      this.handleNewImage(file)
+      await this.handleNewImage(file)
     } else if (MediaService.VIDEO_EXTENSIONS.includes(extension.toLowerCase())) {
-      this.handleNewVideo(file)
+      await this.handleNewVideo(file)
     }
   }
 
@@ -28,6 +28,7 @@ export default class MediaService {
   public static async handleNewVideo(file: File) {
     let video = new Video()
     await video.related('file').associate(file)
+    await video.save()
   }
 
   public static async readDataPoints(video: Video) {
@@ -49,23 +50,26 @@ export default class MediaService {
     const segments = data.split("\n\n\n")
     // Loop over segments, skip last empty segment
     for (let i = 0; i < segments.length - 1; i++) {
-      const point = new VideoDataPoint()
-      point.related('video').associate(video)
       const segment = segments[i]
       const lines = segment.split("\n")
-      point.sequenceNumber = i + 1
-
-      // start seconds
       let start = lines[1].split(' ')[0].split(':')
-      point.startSeconds = 60 * 60 * Number(start[0]) + 60 * Number(start[1]) + Number(start[2].replace(',', '.'))
-
       let dats = lines[2].split(',')
-      point.focalLength = Number(dats[0].split('/')[1].trim())
-      point.shutterSpeed = Number(dats[1].trim().split(' ')[1])
-      point.iso = Number(dats[2].trim().split(' ')[1])
-      point.ev = Number(dats[3].trim().split(' ')[1])
-
-
+      const point = await video.related('dataPoints').create({
+        sequenceNumber: i + 1,
+        startSeconds: 60 * 60 * Number(start[0]) + 60 * Number(start[1]) + Number(start[2].replace(',', '.')),
+        focalLength: Number(dats[0].split('/')[1].trim()),
+        shutterSpeed: Number(dats[1].trim().split(' ')[1]),
+        iso: Number(dats[2].trim().split(' ')[1]),
+        ev: Number(dats[3].trim().split(' ')[1]),
+        dzoom: Number(dats[4].trim().split(' ')[1]),
+        gpsLongitude: Number(dats[5].split('(')[1]),
+        gpsLattitude: Number(dats[6].trim()),
+        gpsCount: Number(dats[7].split(')')[0]),
+        distance: Number(dats[8].trim().split(' ')[1].replace('m', '')),
+        height: Number(dats[9].trim().split(' ')[1].replace('m', '')),
+        horizontalSpeed: Number(dats[10].trim().split(' ')[1].replace('m/s', '')),
+        verticalSpeed: Number(dats[11].trim().split(' ')[1].replace('m/s', ''))
+      })
     }
   }
 

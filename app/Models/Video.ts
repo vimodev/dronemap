@@ -56,11 +56,7 @@ export default class Video extends BaseModel {
       })
     })
     await video.save()
-  }
-
-  @afterCreate()
-  public static async readDataPoints(video: Video) {
-    await MediaService.readDataPoints(video);
+    await MediaService.readDataPoints(video)
   }
 
   @belongsTo(() => File) public file: BelongsTo<typeof File>

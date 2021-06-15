@@ -6,7 +6,7 @@ export default class VideoDataPoints extends BaseSchema {
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
-      table.uuid('video_id').notNullable()
+      table.uuid('video_id').nullable()
       table.foreign('video_id').references('id').inTable('videos').onDelete('CASCADE')
       table.integer('sequence_number').notNullable()
       table.float('start_seconds').notNullable()
