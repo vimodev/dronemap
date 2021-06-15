@@ -1,0 +1,40 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Datapoint info</title>
+  </head>
+  <body>
+    <table id="table" style="width:100%">
+      <th>Attribute</th>
+      <th>Value</th>
+    </table>
+	<script>
+		const urlParams = new URLSearchParams(window.location.search)
+		const pointId = urlParams.get("point")
+    fetch("http://localhost:3333/api/datapoints/" + pointId)
+      .then(function (response) {
+        return response.json()
+      })
+      .then(function (info) {
+        const tab = document.getElementById("table")
+        for (const key in info) {
+          if (info.hasOwnProperty(key)) {
+            const row = document.createElement("tr")
+            let keycell = document.createElement("td")
+            keycell.innerHTML = key
+            let valuecell = document.createElement("td")
+            valuecell.innerHTML = info[key]
+            row.appendChild(keycell)
+            row.appendChild(valuecell)
+            tab.appendChild(row)
+          }
+        }
+        const link = document.createElement("a")
+        link.innerHTML = "Open in video stream"
+        link.href = "video.html?video=" + info.video_id + "&time=" + info.start_seconds
+        document.body.appendChild(link)
+      })
+	</script>
+  </body>
+</html>

@@ -1,13 +1,13 @@
 <!DOCTYPE HTML>
-<title>OpenLayers Simplest Example</title>
+<title>DroneMap</title>
 <div id="demoMap" style="height:98vh;"></div>
 <script src="openlayers/OpenLayers.js"></script>
 <script>
     map = new OpenLayers.Map("demoMap");
     map.addLayer(new OpenLayers.Layer.OSM());
-	var markers = new OpenLayers.Layer.Markers( "Markers" );
+	  var markers = new OpenLayers.Layer.Markers( "Markers" );
     map.addLayer(markers);
-	var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+	  var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
     var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
 
 	fetch("http://localhost:3333/api/videos")
@@ -30,12 +30,13 @@
               marker.res_width = video.resolution_width
               marker.res_height = video.resolution_height
 							marker.events.register("click", marker, function(mark) {
-                width = Math.max(window.screen.availWidth * 0.8, mark.object.res_width)
-                height = Math.max(window.screen.availHeight * 0.8, mark.object.res_height)
-								window.open("video.html?video=" + mark.object.videoId + "&time=" + mark.object.time, 'Video',`width=${width}, height=${height}`)
+                window.open("point.html?point=" + mark.object.id, 'Info', 'width=700, height=500')
+                // width = Math.max(window.screen.availWidth * 0.8, mark.object.res_width)
+                // height = Math.max(window.screen.availHeight * 0.8, mark.object.res_height)
+								// window.open("video.html?video=" + mark.object.videoId + "&time=" + mark.object.time, 'Video',`width=${width}, height=${height}`)
 							})
 							markers.addMarker(marker)
-							map.setCenter(marker.lonlat, 15)
+              map.setCenter(marker.lonlat, 15)
 						})
 					})
 			})
