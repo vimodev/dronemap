@@ -11,7 +11,7 @@
 	<script>
 		const urlParams = new URLSearchParams(window.location.search)
 		const videoId = urlParams.get("video")
-		document.getElementById("videoSource").src = "http://192.168.1.33:3333/api/videos/" + videoId + "/stream"
+		document.getElementById("videoSource").src = "/api/videos/" + videoId + "/stream"
 		document.getElementById("videoPlayer").currentTime = Math.floor(urlParams.get("time"))
     document.getElementById("videoPlayer").pause()
 	</script>

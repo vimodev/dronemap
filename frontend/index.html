@@ -13,7 +13,7 @@
 <script>
 
   function callSync() {
-    fetch("http://192.168.1.33:3333/api/sync")
+    fetch("/api/sync")
   }
 
   function closePopup() {
@@ -29,19 +29,18 @@
 	  var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
     var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
 
-	fetch("http://192.168.1.33:3333/api/videos")
+	fetch("/api/videos")
 		.then(function (response) {
 			return response.json()
 		})
 		.then(function (videos) {
 			videos.forEach((video) => {
-				fetch("http://192.168.1.33:3333/api/videos/" + video.id + "/datapoints")
+				fetch("/api/videos/" + video.id + "/datapoints")
 					.then(function (res) {
 						return res.json()
 					})
 					.then(function (points) {
 						points.forEach((p) => {
-							//console.log(p)
 							marker = new OpenLayers.Marker(new OpenLayers.LonLat(p.gps_longitude, p.gps_lattitude).transform(fromProjection, toProjection))
 							marker.id = p.id
 							marker.videoId = p.video_id
@@ -49,7 +48,6 @@
               marker.res_width = video.resolution_width
               marker.res_height = video.resolution_height
 							marker.events.register("click", marker, function(mark) {
-                //window.open("point.html?point=" + mark.object.id, 'Info', 'width=1000, height=1000')
                 closePopup()
                 let overlay = document.getElementById('overlay')
                 let frame = document.createElement('iframe')
