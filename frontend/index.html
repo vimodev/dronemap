@@ -9,7 +9,7 @@
     map.addLayer(markers);
 	var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
     var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
-	
+
 	fetch("http://localhost:3333/api/videos")
 		.then(function (response) {
 			return response.json()
@@ -27,8 +27,12 @@
 							marker.id = p.id
 							marker.videoId = p.video_id
 							marker.time = p.start_seconds
+              marker.res_width = video.resolution_width
+              marker.res_height = video.resolution_height
 							marker.events.register("click", marker, function(mark) {
-								window.open("video.html?video=" + mark.object.videoId + "&time=" + mark.object.time, "_blank")
+                width = Math.max(window.screen.availWidth * 0.8, mark.object.res_width)
+                height = Math.max(window.screen.availHeight * 0.8, mark.object.res_height)
+								window.open("video.html?video=" + mark.object.videoId + "&time=" + mark.object.time, 'Video',`width=${width}, height=${height}`)
 							})
 							markers.addMarker(marker)
 							map.setCenter(marker.lonlat, 15)
@@ -37,5 +41,5 @@
 			})
 			//map.zoomToMaxExtent();
 		})
-	
+
 </script>
