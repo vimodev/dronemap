@@ -44,7 +44,7 @@ export default class MediaService {
           timestamps: [point.startSeconds],
           filename: point.id + '.png',
           folder: tmpDir,
-          size: '320x240',
+          size: '640x480',
         })
         .on('end', function() {
           resolve(true)
@@ -52,6 +52,7 @@ export default class MediaService {
     })
     let thumbnail = fs.createReadStream(tmpDir + path.sep + point.id + '.png')
     http.response.stream(thumbnail)
+    fs.unlinkSync(tmpDir + path.sep + point.id + '.png')
   }
 
   public static async readDataPoints(video: Video) {
@@ -94,6 +95,7 @@ export default class MediaService {
         verticalSpeed: Number(dats[11].trim().split(' ')[1].replace('m/s', ''))
       })
     }
+    fs.unlinkSync(subtitleFile)
   }
 
 }
