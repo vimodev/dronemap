@@ -66,6 +66,7 @@ export default class FileService {
         await File.create({filePath: file})
       }
     }
+    console.log("Database file sync done. Datapoints will be extracted passively now.")
     FileService.isSyncing = false
   }
 
