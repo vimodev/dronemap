@@ -4,16 +4,17 @@
   <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
+<button id="toolbutt" onclick="callSync()">Synchronize database</button>
 <div id="overlay">
   <button onclick="closePopup()">Close</button>
 </div>
 <div id="demoMap" style="height:98vh;"></div>
-<!-- <div id="popup" class="ol-popup">
-      <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-      <div id="popup-content"></div>
-</div> -->
 <script src="openlayers/OpenLayers.js"></script>
 <script>
+
+  function callSync() {
+    fetch("http://192.168.1.33:3333/api/sync")
+  }
 
   function closePopup() {
     let el = document.getElementById("frame")
@@ -28,13 +29,13 @@
 	  var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
     var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
 
-	fetch("http://localhost:3333/api/videos")
+	fetch("http://192.168.1.33:3333/api/videos")
 		.then(function (response) {
 			return response.json()
 		})
 		.then(function (videos) {
 			videos.forEach((video) => {
-				fetch("http://localhost:3333/api/videos/" + video.id + "/datapoints")
+				fetch("http://192.168.1.33:3333/api/videos/" + video.id + "/datapoints")
 					.then(function (res) {
 						return res.json()
 					})

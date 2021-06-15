@@ -11,3 +11,11 @@
   z-index: 999999; /* Specify a stack order in case you're using a different order for other elements */
   cursor: pointer; /* Add a pointer on hover */
 }
+
+#toolbutt {
+  position: fixed; /* Sit on top of the page content */
+  top: 25px;
+  left: 50px;
+  z-index: 999999; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}

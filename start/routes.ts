@@ -72,3 +72,10 @@ Route.group(() => {
     return fs.readFileSync(`frontend${path.sep}index.html`).toString()
   })
 }).prefix('/page')
+
+Route.get('/', async ({response}: HttpContextContract) => {response.redirect().toPath('/page/index.html')})
+Route.get('/page', async ({response}: HttpContextContract) => {response.redirect().toPath('/page/index.html')})
+
+Route.get('/page/*', async (http: HttpContextContract) => {
+    http.response.stream(fs.createReadStream(`frontend${path.sep}${http.params['*'].join(path.sep)}`))
+  })

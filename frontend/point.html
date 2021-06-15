@@ -14,7 +14,7 @@
 	<script>
 		const urlParams = new URLSearchParams(window.location.search)
 		const pointId = urlParams.get("point")
-    fetch("http://localhost:3333/api/datapoints/" + pointId)
+    fetch("http://192.168.1.33:3333/api/datapoints/" + pointId)
       .then(function (response) {
         return response.json()
       })
@@ -40,7 +40,7 @@
         document.body.appendChild(link)
         document.body.appendChild(document.createElement("br"))
         const img = document.createElement("img")
-        img.src = "http://localhost:3333/api/datapoints/" + info.id + "/thumbnail"
+        img.src = "http://192.168.1.33:3333/api/datapoints/" + info.id + "/thumbnail"
         img.style.display = "block"
         img.style.marginLeft = "auto"
         img.style.marginRight = "auto"

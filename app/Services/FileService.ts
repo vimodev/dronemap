@@ -5,6 +5,8 @@ import path from 'path'
 
 export default class FileService {
 
+  public static isSyncing = false
+
   /**
    * Compute sha-256 of the given file
    * @param filename
@@ -34,6 +36,9 @@ export default class FileService {
    * adds new entries
    */
   public static async synchronizeFileDatabase() {
+    if (FileService.isSyncing) return
+    FileService.isSyncing = true
+    console.log("Starting database file sync")
     let databaseFiles = await File.all()
     // First go over all files in database to see if they are correct
     for (const file of databaseFiles) {
@@ -61,6 +66,7 @@ export default class FileService {
         await File.create({filePath: file})
       }
     }
+    FileService.isSyncing = false
   }
 
   /**
