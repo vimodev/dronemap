@@ -13,6 +13,7 @@
 		const videoId = urlParams.get("video")
 		document.getElementById("videoSource").src = "http://localhost:3333/api/videos/" + videoId + "/stream"
 		document.getElementById("videoPlayer").currentTime = Math.floor(urlParams.get("time"))
+    document.getElementById("videoPlayer").pause()
 	</script>
   </body>
 </html>

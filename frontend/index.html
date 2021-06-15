@@ -1,8 +1,26 @@
 <!DOCTYPE HTML>
-<title>DroneMap</title>
+<head>
+  <title>DroneMap</title>
+  <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+<body>
+<div id="overlay">
+  <button onclick="closePopup()">Close</button>
+</div>
 <div id="demoMap" style="height:98vh;"></div>
+<!-- <div id="popup" class="ol-popup">
+      <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+      <div id="popup-content"></div>
+</div> -->
 <script src="openlayers/OpenLayers.js"></script>
 <script>
+
+  function closePopup() {
+    let el = document.getElementById("frame")
+    if (el != null) el.remove()
+    document.getElementById("overlay").style.display = "none"
+  }
+
     map = new OpenLayers.Map("demoMap");
     map.addLayer(new OpenLayers.Layer.OSM());
 	  var markers = new OpenLayers.Layer.Markers( "Markers" );
@@ -30,7 +48,16 @@
               marker.res_width = video.resolution_width
               marker.res_height = video.resolution_height
 							marker.events.register("click", marker, function(mark) {
-                window.open("point.html?point=" + mark.object.id, 'Info', 'width=1000, height=1000')
+                //window.open("point.html?point=" + mark.object.id, 'Info', 'width=1000, height=1000')
+                closePopup()
+                let overlay = document.getElementById('overlay')
+                let frame = document.createElement('iframe')
+                frame.src = "point.html?point=" + mark.object.id
+                frame.style.width = "100%"
+                frame.style.height = "95%"
+                frame.id = "frame"
+                overlay.appendChild(frame)
+                overlay.style.display = "block"
 							})
 							markers.addMarker(marker)
               map.setCenter(marker.lonlat, 15)
@@ -41,3 +68,4 @@
 		})
 
 </script>
+</body>

@@ -5,10 +5,11 @@
     <title>Datapoint info</title>
   </head>
   <body>
-    <table id="table" style="width:100%">
+    <table id="table" style="width:70%;margin-left: auto;margin-right: auto;">
       <th>Attribute</th>
       <th>Value</th>
     </table>
+    <br>
     <img id="loadingAnimation" src="loading.gif">
 	<script>
 		const urlParams = new URLSearchParams(window.location.search)
@@ -22,23 +23,29 @@
         for (const key in info) {
           if (info.hasOwnProperty(key)) {
             const row = document.createElement("tr")
+            row.style.border = "5px solid black"
             let keycell = document.createElement("td")
             keycell.innerHTML = key
+            keycell.style.textAlign = "center"
             let valuecell = document.createElement("td")
             valuecell.innerHTML = info[key]
+            valuecell.style.textAlign = "center"
             row.appendChild(keycell)
             row.appendChild(valuecell)
             tab.appendChild(row)
           }
         }
         const link = document.createElement("a")
-        link.innerHTML = "Open in video stream"
         link.href = "video.html?video=" + info.video_id + "&time=" + info.start_seconds
         document.body.appendChild(link)
         document.body.appendChild(document.createElement("br"))
         const img = document.createElement("img")
         img.src = "http://localhost:3333/api/datapoints/" + info.id + "/thumbnail"
-        document.body.appendChild(img)
+        img.style.display = "block"
+        img.style.marginLeft = "auto"
+        img.style.marginRight = "auto"
+        //document.body.appendChild(img)
+        link.appendChild(img)
         document.getElementById("loadingAnimation").remove()
       })
 	</script>
