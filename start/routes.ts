@@ -25,14 +25,6 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import File from 'App/Models/File'
 import VideoDataPoint from 'App/Models/VideoDataPoint'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
-
-Route.get('/test', async () => {
-  await FileService.synchronizeFileDatabase()
-})
-
 Route.group(() => {
 
   // Video stuff
@@ -53,6 +45,8 @@ Route.group(() => {
       // Get file object
       Route.get('', async ({params}: HttpContextContract) => await File.find(params.fileId))
     }).prefix('/:fileId')
+    // Start syncing
+    Route.get('/sync', async () => await FileService.synchronizeFileDatabase())
   }).prefix('/files')
 
   // Datapoints
