@@ -42,6 +42,7 @@
 						return res.json()
 					})
 					.then(function (points) {
+            let filter = `brightness(${Math.random() * 0.75 + 1})hue-rotate(${Math.random()}turn)saturate(4)`
             let p_prev = null
 						for (const p of points) {
               // If same coordinates as previous, dont draw it
@@ -63,6 +64,8 @@
                 overlay.style.display = "block"
 							})
 							markers.addMarker(marker)
+              marker.inflate(0.85)
+              marker.icon.imageDiv.children[0].style.filter = filter
               map.setCenter(marker.lonlat, 15)
               p_prev = p
 						}
