@@ -6,6 +6,10 @@ import FileService from 'App/Services/FileService'
 import MediaService from 'App/Services/MediaService'
 import fs from 'fs'
 
+/**
+ * Represents a File record in the database
+ * each file record corresponds 1:1 with a file on fs.
+ */
 export default class File extends BaseModel {
 
   public static selfAssignPrimaryKey = true
@@ -43,6 +47,7 @@ export default class File extends BaseModel {
     if (file.size == undefined) file.size = fs.statSync(process.env.FILE_ROOT + file.filePath).size
   }
 
+  // After the file is created in the database, decide what to do with it
   @afterCreate()
   public static async handleFile(file: File) {
     MediaService.handleNewFile(file)

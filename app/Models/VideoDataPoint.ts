@@ -3,6 +3,9 @@ import { BaseModel, beforeCreate, BelongsTo, belongsTo, column } from '@ioc:Adon
 import { v4 as uuid } from 'uuid'
 import Video from './Video'
 
+/**
+ * Represents a data instance from DJI footage's subtitles
+ */
 export default class VideoDataPoint extends BaseModel {
   public static selfAssignPrimaryKey = true
 

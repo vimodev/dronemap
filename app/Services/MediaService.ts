@@ -9,9 +9,14 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class MediaService {
 
+  // We recognize these extensions as the corresponding media types
   public static IMAGE_EXTENSIONS = ['jpg']
   public static VIDEO_EXTENSIONS = ['mp4']
 
+  /**
+   * Do something with file based on extension
+   * @param file
+   */
   public static async handleNewFile(file: File) {
     let split = file.filePath.split('.')
     let extension = split[split.length - 1]
@@ -23,26 +28,42 @@ export default class MediaService {
   }
 
   public static async handleNewImage(file: File) {
-
+    // Image functionality planned
   }
 
+  /**
+   * Do stuff with a newly made video
+   * Specifically scan the subtitles for data points
+   * @param file
+   */
   public static async handleNewVideo(file: File) {
     if (!(await MediaService.isDjiVideo(file))) {
+      // If its not recognized as a DJI video, we skip
       console.log(`${file.filePath} not recognized as DJI video with subtitles. Not analyzing it further.`)
       return
     }
     console.log("Handling " + file.filePath)
+    // Make a video object in the database and associate it with file
     let video = new Video()
     await video.related('file').associate(file)
     await video.save()
   }
 
+  /**
+   * Generate a thumbnail for the given data point
+   * @param point to use
+   * @param http to stream
+   */
   public static async thumbnail(point: VideoDataPoint, http: HttpContextContract) {
+    // Load associated video and file
     await point.load('video')
     await point.video.load('file')
+    // Make a temporary directory
     const tmpDir = fs.mkdtempSync(`${os.tmpdir()}${path.sep}`)
     await new Promise((resolve) => {
+      // Log it
       console.log("Thumbnail generated: " + tmpDir + path.sep + point.id)
+      // Use ffmpeg to fetch a screen from the corresponding time offset in the video
       ffmpeg(process.env.FILE_ROOT + point.video.file.filePath)
         .screenshots({
           timestamps: [point.startSeconds],
@@ -54,11 +75,17 @@ export default class MediaService {
           resolve(true)
         })
     })
+    // Stream it
     let thumbnail = fs.createReadStream(tmpDir + path.sep + point.id + '.png')
     http.response.stream(thumbnail)
+    // Yeet it
     fs.unlinkSync(tmpDir + path.sep + point.id + '.png')
   }
 
+  /**
+   * Scan given video for data points
+   * @param video
+   */
   public static async readDataPoints(video: Video) {
     // Make temp directory
     const tmpDir = fs.mkdtempSync(`${os.tmpdir()}${path.sep}`)
@@ -78,11 +105,20 @@ export default class MediaService {
     const segments = data.split("\n\n\n")
     // Loop over segments, skip last empty segment
     for (let i = 0; i < segments.length - 1; i++) {
+      // In my experience each segment is of the following format:
+      //
+      // 5
+      // 00:00:04,000 --> 00:00:05,000
+      // F/2.8, SS 1000.82, ISO 100, EV 0, DZOOM 1.000, GPS (7.7298, 50.2099, 23), D 9.91m, H 1.60m, H.S 9.45m/s, V.S 1.90m/s
+      //
       const segment = segments[i]
+      // Split the lines
       const lines = segment.split("\n")
+      // Get starting time
       let start = lines[1].split(' ')[0].split(':')
       let dats = lines[2].split(',')
       try {
+        // Attempt to create a point from the found data
         const point = await video.related('dataPoints').create({
           sequenceNumber: i + 1,
           startSeconds: 60 * 60 * Number(start[0]) + 60 * Number(start[1]) + Number(start[2].replace(',', '.')),
@@ -100,8 +136,11 @@ export default class MediaService {
           verticalSpeed: Number(dats[11].trim().split(' ')[1].replace('m/s', ''))
         })
       } catch {
+        // If it fails we can not read the subtitle
         console.log(`Unable to read datapoint from subtitles of ${video.file}, aborting analysis of this file.`)
+        // Delete the video in database
         await video.delete()
+        // And remove the subtitle file we dumped
         fs.unlinkSync(subtitleFile)
         return
       }
@@ -109,12 +148,19 @@ export default class MediaService {
     fs.unlinkSync(subtitleFile)
   }
 
+  /**
+   * Use ffprobe to check whether given file is a DJI footage video with subs
+   * @param file
+   */
   public static async isDjiVideo(file: File): Promise<boolean> {
     return await new Promise((resolve) => {
+      // Probe for metadata
       ffmpeg.ffprobe(process.env.FILE_ROOT + file.filePath, function(err, metadata) {
         let hasSub = false
+        // As long as one of the streams has a handler name tag of DJI.Subtitle
         for (const stream of metadata.streams) {
           if ((stream.tags.handler_name as string).includes('DJI.Subtitle')) {
+            // We recognize it
             hasSub = true
             break
           }

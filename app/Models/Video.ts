@@ -6,6 +6,9 @@ import ffmpeg from 'fluent-ffmpeg'
 import VideoDataPoint from './VideoDataPoint'
 import MediaService from 'App/Services/MediaService'
 
+/**
+ * Represents an analyzed DJI footage video
+ */
 export default class Video extends BaseModel {
   public static selfAssignPrimaryKey = true
 
@@ -27,9 +30,11 @@ export default class Video extends BaseModel {
   @column()
   public resolutionHeight: number
 
+  // Date footage was shot
   @column.dateTime()
   public dateShot: DateTime
 
+  // Database dates
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -41,6 +46,7 @@ export default class Video extends BaseModel {
     if (video.id == undefined) video.id = uuid()
   }
 
+  // We want to extract metadata from the video after scanning
   @afterCreate()
   public static async gatherMetadata(video: Video) {
     await new Promise(async (resolve) => {
@@ -60,6 +66,7 @@ export default class Video extends BaseModel {
       })
     })
     await video.save()
+    // And analyze the video for data points
     await MediaService.readDataPoints(video)
     await video.load('dataPoints')
   }
