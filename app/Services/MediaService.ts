@@ -69,7 +69,7 @@ export default class MediaService {
           timestamps: [point.startSeconds],
           filename: point.id + '.png',
           folder: tmpDir,
-          size: '640x480',
+          size: '640x384',
         })
         .on('end', function() {
           resolve(true)
