@@ -27,6 +27,10 @@ export default class MediaService {
   }
 
   public static async handleNewVideo(file: File) {
+    if (!(await MediaService.isDjiVideo(file))) {
+      console.log(`${file.filePath} not recognized as DJI video with subtitles. Not analyzing it further.`)
+      return
+    }
     console.log("Handling " + file.filePath)
     let video = new Video()
     await video.related('file').associate(file)
@@ -78,24 +82,46 @@ export default class MediaService {
       const lines = segment.split("\n")
       let start = lines[1].split(' ')[0].split(':')
       let dats = lines[2].split(',')
-      const point = await video.related('dataPoints').create({
-        sequenceNumber: i + 1,
-        startSeconds: 60 * 60 * Number(start[0]) + 60 * Number(start[1]) + Number(start[2].replace(',', '.')),
-        focalLength: Number(dats[0].split('/')[1].trim()),
-        shutterSpeed: Number(dats[1].trim().split(' ')[1]),
-        iso: Number(dats[2].trim().split(' ')[1]),
-        ev: Number(dats[3].trim().split(' ')[1]),
-        dzoom: Number(dats[4].trim().split(' ')[1]),
-        gpsLongitude: Number(dats[5].split('(')[1]),
-        gpsLattitude: Number(dats[6].trim()),
-        gpsCount: Number(dats[7].split(')')[0]),
-        distance: Number(dats[8].trim().split(' ')[1].replace('m', '')),
-        height: Number(dats[9].trim().split(' ')[1].replace('m', '')),
-        horizontalSpeed: Number(dats[10].trim().split(' ')[1].replace('m/s', '')),
-        verticalSpeed: Number(dats[11].trim().split(' ')[1].replace('m/s', ''))
-      })
+      try {
+        const point = await video.related('dataPoints').create({
+          sequenceNumber: i + 1,
+          startSeconds: 60 * 60 * Number(start[0]) + 60 * Number(start[1]) + Number(start[2].replace(',', '.')),
+          focalLength: Number(dats[0].split('/')[1].trim()),
+          shutterSpeed: Number(dats[1].trim().split(' ')[1]),
+          iso: Number(dats[2].trim().split(' ')[1]),
+          ev: Number(dats[3].trim().split(' ')[1]),
+          dzoom: Number(dats[4].trim().split(' ')[1]),
+          gpsLongitude: Number(dats[5].split('(')[1]),
+          gpsLattitude: Number(dats[6].trim()),
+          gpsCount: Number(dats[7].split(')')[0]),
+          distance: Number(dats[8].trim().split(' ')[1].replace('m', '')),
+          height: Number(dats[9].trim().split(' ')[1].replace('m', '')),
+          horizontalSpeed: Number(dats[10].trim().split(' ')[1].replace('m/s', '')),
+          verticalSpeed: Number(dats[11].trim().split(' ')[1].replace('m/s', ''))
+        })
+      } catch {
+        console.log(`Unable to read datapoint from subtitles of ${video.file}, aborting analysis of this file.`)
+        await video.delete()
+        fs.unlinkSync(subtitleFile)
+        return
+      }
     }
     fs.unlinkSync(subtitleFile)
+  }
+
+  public static async isDjiVideo(file: File): Promise<boolean> {
+    return await new Promise((resolve) => {
+      ffmpeg.ffprobe(process.env.FILE_ROOT + file.filePath, function(err, metadata) {
+        let hasSub = false
+        for (const stream of metadata.streams) {
+          if ((stream.tags.handler_name as string).includes('DJI.Subtitle')) {
+            hasSub = true
+            break
+          }
+        }
+        return resolve(hasSub)
+      })
+    })
   }
 
 }
