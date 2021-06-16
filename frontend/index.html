@@ -40,7 +40,12 @@
 						return res.json()
 					})
 					.then(function (points) {
-						points.forEach((p) => {
+            let p_prev = null
+						for (const p of points) {
+              // If same coordinates as previous, dont draw it
+              if (p_prev != null && p_prev.gps_longitude == p.gps_longitude && p_prev.gps_lattitude == p.gps_lattitude) {
+                continue
+              }
 							marker = new OpenLayers.Marker(new OpenLayers.LonLat(p.gps_longitude, p.gps_lattitude).transform(fromProjection, toProjection))
 							marker.id = p.id
 							marker.videoId = p.video_id
@@ -60,7 +65,8 @@
 							})
 							markers.addMarker(marker)
               map.setCenter(marker.lonlat, 15)
-						})
+              p_prev = p
+						}
 					})
 			})
 			//map.zoomToMaxExtent();

@@ -2,6 +2,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .thumbnailContainer {
+        position:relative;
+      }
+
+      .imageContainer {
+        position: absolute;
+        margin:0 auto;
+        left:50%;
+        width: 30%;
+        margin-left: -15%;
+      }
+
+
+    </style>
     <title>Datapoint info</title>
   </head>
   <body>
@@ -11,6 +26,10 @@
     </table>
     <br>
     <img id="loadingAnimation" src="loading.gif">
+    <div id=thumbnailContainer class="thumbnailContainer">
+      Click thumbnail to play in video
+      <div class="imageContainer" id="imageContainer"></div>
+    </div>
 	<script>
 		const urlParams = new URLSearchParams(window.location.search)
 		const pointId = urlParams.get("point")
@@ -37,13 +56,11 @@
         }
         const link = document.createElement("a")
         link.href = "video.html?video=" + info.video_id + "&time=" + info.start_seconds
-        document.body.appendChild(link)
-        document.body.appendChild(document.createElement("br"))
+        let cont = document.getElementById('imageContainer')
+        cont.appendChild(link)
         const img = document.createElement("img")
         img.src = "/api/datapoints/" + info.id + "/thumbnail"
-        img.style.display = "block"
-        img.style.marginLeft = "auto"
-        img.style.marginRight = "auto"
+        //img.classList.add('thumbnail')
         //document.body.appendChild(img)
         link.appendChild(img)
         document.getElementById("loadingAnimation").remove()
