@@ -28,6 +28,7 @@ import fs from 'fs'
 import path from 'path'
 import MediaService from 'App/Services/MediaService'
 
+// Backend api stuff
 Route.group(() => {
 
   // Start syncing
@@ -79,9 +80,9 @@ Route.group(() => {
   })
 }).prefix('/page')
 
+// Static frontend stuff
 Route.get('/', async ({response}: HttpContextContract) => {response.redirect().toPath('/page/index.html')})
 Route.get('/page', async ({response}: HttpContextContract) => {response.redirect().toPath('/page/index.html')})
-
 Route.get('/page/*', async (http: HttpContextContract) => {
     http.response.stream(fs.createReadStream(`frontend${path.sep}${http.params['*'].join(path.sep)}`))
   })
