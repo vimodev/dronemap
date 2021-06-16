@@ -12,12 +12,30 @@
   cursor: pointer; /* Add a pointer on hover */
 }
 
+body {
+  margin: 0;
+}
+
 #toolbutt {
   position: fixed; /* Sit on top of the page content */
   top: 25px;
-  left: 50px;
+  right: 25px;
+  font-size: larger;
   z-index: 999999; /* Specify a stack order in case you're using a different order for other elements */
   cursor: pointer; /* Add a pointer on hover */
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
+#sattoggle {
+  position: fixed; /* Sit on top of the page content */
+  top: 25px;
+  left: 60px;
+  font-size: larger;
+  z-index: 999999; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+  border: 2px solid black;
+  border-radius: 5px;
 }
 
 #filterMenu {
