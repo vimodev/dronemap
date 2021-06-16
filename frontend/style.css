@@ -3,10 +3,10 @@
   display: none; /* Hidden by default */
   width: 80%; /* Full width (cover the whole page) */
   height: 90%; /* Full height (cover the whole page) */
-  top: 50%;
-  left: 50%;
-  margin-top: -25%;
-  margin-left: -40%;
+  top: 5%;
+  left: 10%;
+  /* margin-top: -45%;
+  margin-left: -45%; */
   background-color: rgba(255, 255, 255, 0.85); /* Black background with opacity */
   z-index: 999999; /* Specify a stack order in case you're using a different order for other elements */
   cursor: pointer; /* Add a pointer on hover */

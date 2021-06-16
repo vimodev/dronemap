@@ -74,7 +74,7 @@
               if (p_prev != null && p_prev.gps_longitude == p.gps_longitude && p_prev.gps_lattitude == p.gps_lattitude) {
                 continue
               }
-							marker = new OpenLayers.Marker(new OpenLayers.LonLat(p.gps_longitude + 0.0001 * Math.random(), p.gps_lattitude + 0.0001 * Math.random()).transform(fromProjection, toProjection))
+							marker = new OpenLayers.Marker(new OpenLayers.LonLat(p.gps_longitude + 0.00015 * Math.random(), p.gps_lattitude + 0.00015 * Math.random()).transform(fromProjection, toProjection))
               p.video = video
               marker.point = p
 							marker.events.register("click", marker, function(mark) {
