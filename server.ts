@@ -13,8 +13,13 @@
 import 'reflect-metadata'
 import sourceMapSupport from 'source-map-support'
 import { Ignitor } from '@adonisjs/core/build/standalone'
+import ffmpeg from 'fluent-ffmpeg'
+import path from 'path'
 
 sourceMapSupport.install({ handleUncaughtExceptions: false })
+
+ffmpeg.setFfmpegPath('ffmpeg' + path.sep + 'ffmpeg.exe')
+ffmpeg.setFfprobePath('ffmpeg' + path.sep + 'ffprobe.exe')
 
 new Ignitor(__dirname)
   .httpServer()
