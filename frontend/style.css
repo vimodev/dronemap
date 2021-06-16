@@ -2,7 +2,7 @@
   position: fixed; /* Sit on top of the page content */
   display: none; /* Hidden by default */
   width: 80%; /* Full width (cover the whole page) */
-  height: 80%; /* Full height (cover the whole page) */
+  height: 90%; /* Full height (cover the whole page) */
   top: 50%;
   left: 50%;
   margin-top: -25%;

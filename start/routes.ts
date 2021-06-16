@@ -59,7 +59,13 @@ Route.group(() => {
   Route.group(() => {
     Route.group(() => {
       // Get datapoint object
-      Route.get('', async ({params}: HttpContextContract) => await VideoDataPoint.find(params.datapointId))
+      Route.get('', async ({params}: HttpContextContract) => {
+        let p = await VideoDataPoint.find(params.datapointId)
+        if (p == null) return
+        await p.load('video')
+        await p.video.load('file')
+        return p
+      })
       Route.get('/thumbnail', async(http: HttpContextContract) => await MediaService.thumbnail(await VideoDataPoint.findOrFail(http.params.datapointId), http))
     }).prefix('/:datapointId')
     Route.get('', async () => await VideoDataPoint.all())

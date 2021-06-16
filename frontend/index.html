@@ -6,7 +6,7 @@
 <body>
 <button id="toolbutt" onclick="callSync()">Synchronize database</button>
 <div id="overlay">
-  <button onclick="closePopup()">Close</button>
+  <button onclick="closePopup()" style="position:fixed;">Close</button>
 </div>
 <div id="demoMap" style="height:98vh;"></div>
 <script src="openlayers/OpenLayers.js"></script>
@@ -47,18 +47,15 @@
                 continue
               }
 							marker = new OpenLayers.Marker(new OpenLayers.LonLat(p.gps_longitude, p.gps_lattitude).transform(fromProjection, toProjection))
-							marker.id = p.id
-							marker.videoId = p.video_id
-							marker.time = p.start_seconds
-              marker.res_width = video.resolution_width
-              marker.res_height = video.resolution_height
+              p.video = video
+              marker.point = p
 							marker.events.register("click", marker, function(mark) {
                 closePopup()
                 let overlay = document.getElementById('overlay')
                 let frame = document.createElement('iframe')
-                frame.src = "point.html?point=" + mark.object.id
+                frame.src = "point.html?point=" + mark.object.point.id
                 frame.style.width = "100%"
-                frame.style.height = "95%"
+                frame.style.height = "100%"
                 frame.id = "frame"
                 overlay.appendChild(frame)
                 overlay.style.display = "block"
