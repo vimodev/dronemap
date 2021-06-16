@@ -12,6 +12,7 @@ export default class Videos extends BaseSchema {
       table.string('length')
       table.integer('resolution_width')
       table.integer('resolution_height')
+      table.dateTime('date_shot')
       table.timestamps(true, true)
     })
   }

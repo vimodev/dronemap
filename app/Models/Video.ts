@@ -27,6 +27,9 @@ export default class Video extends BaseModel {
   @column()
   public resolutionHeight: number
 
+  @column.dateTime()
+  public dateShot: DateTime
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -52,6 +55,7 @@ export default class Video extends BaseModel {
         if (video.length == undefined) video.length = metadata.format.duration as string || '0'
         if (video.resolutionWidth == undefined) video.resolutionWidth = metadata.streams[0].width || 0
         if (video.resolutionHeight == undefined) video.resolutionHeight = metadata.streams[0].height || 0
+        if (video.dateShot == undefined) video.dateShot = DateTime.fromISO(metadata.format.tags.creation_time as string)
         return resolve(true)
       })
     })
