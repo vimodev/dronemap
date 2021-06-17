@@ -1,7 +1,13 @@
 dronemap
 
-Planned features:
-Transcoding
+Planned:
+
+Improve point info layout
+
 Images
-Filtering markers on map
-Better markers / exhaustive markers
+
+Marker filtering
+
+Improve marker visibility in high density
+
+Transcoding

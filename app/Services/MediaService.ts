@@ -21,14 +21,10 @@ export default class MediaService {
     let split = file.filePath.split('.')
     let extension = split[split.length - 1]
     if (MediaService.IMAGE_EXTENSIONS.includes(extension.toLowerCase())) {
-      await this.handleNewImage(file)
+      // Planned
     } else if (MediaService.VIDEO_EXTENSIONS.includes(extension.toLowerCase())) {
       await this.handleNewVideo(file)
     }
-  }
-
-  public static async handleNewImage(file: File) {
-    // Image functionality planned
   }
 
   /**
@@ -119,7 +115,7 @@ export default class MediaService {
       let dats = lines[2].split(',')
       try {
         // Attempt to create a point from the found data
-        const point = await video.related('dataPoints').create({
+        await video.related('dataPoints').create({
           sequenceNumber: i + 1,
           startSeconds: 60 * 60 * Number(start[0]) + 60 * Number(start[1]) + Number(start[2].replace(',', '.')),
           focalLength: Number(dats[0].split('/')[1].trim()),
@@ -155,7 +151,7 @@ export default class MediaService {
   public static async isDjiVideo(file: File): Promise<boolean> {
     return await new Promise((resolve) => {
       // Probe for metadata
-      ffmpeg.ffprobe(process.env.FILE_ROOT + file.filePath, function(err, metadata) {
+      ffmpeg.ffprobe(process.env.FILE_ROOT + file.filePath, function(metadata) {
         let hasSub = false
         // As long as one of the streams has a handler name tag of DJI.Subtitle
         for (const stream of metadata.streams) {
