@@ -39,6 +39,17 @@ body {
   border-radius: 5px;
 }
 
+#colorize {
+  position: fixed; /* Sit on top of the page content */
+  top: 25px;
+  left: 220px;
+  font-size: larger;
+  z-index: 999999; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
 #filterMenu {
   position: fixed;
   top: 125px;

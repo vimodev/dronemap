@@ -101,7 +101,7 @@ export default class MediaService {
     const segments = data.split("\n\n\n")
     // Loop over segments, skip last empty segment
     for (let i = 0; i < segments.length - 1; i++) {
-      // In my experience each segment is of the following format:
+      // In my experience each segment is of the following format (when using ffmpeg to extract .srt):
       //
       // 5
       // 00:00:04,000 --> 00:00:05,000

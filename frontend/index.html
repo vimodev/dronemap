@@ -5,7 +5,8 @@
 </head>
 <body>
 <button id="sattoggle" onclick="toggleSat()">Toggle Satellite</button>
-<button id="toolbutt" onclick="callSync()">Synchronize database</button>
+<button id="colorize" onclick="randomizeColors()">Re-colorize Markers</button>
+<button id="toolbutt" onclick="callSync()">Synchronize Database</button>
 <div id="filterMenu">
 </div>
 <div id="overlay">
@@ -38,6 +39,17 @@
     }
   }
 
+  function randomizeColors() {
+    for (const video of fetched_videos) {
+      let filter = `brightness(${Math.random() * 0.75 + 1})hue-rotate(${Math.random()}turn)saturate(4)`
+      for (const marker of video.markers) {
+        marker.icon.imageDiv.children[0].style.filter = filter
+      }
+    }
+  }
+
+  let fetched_videos = null
+
     map = new OpenLayers.Map("demoMap");
     let sat = new OpenLayers.Layer.XYZ(
                 "Satellite", [
@@ -61,12 +73,15 @@
 			return response.json()
 		})
 		.then(function (videos) {
+      fetched_videos = videos
 			videos.forEach((video) => {
 				fetch("/api/videos/" + video.id + "/datapoints")
 					.then(function (res) {
 						return res.json()
 					})
 					.then(function (points) {
+            video.points = points
+            video.markers = []
             let filter = `brightness(${Math.random() * 0.75 + 1})hue-rotate(${Math.random()}turn)saturate(4)`
             let p_prev = null
 						for (const p of points) {
@@ -77,6 +92,7 @@
 							marker = new OpenLayers.Marker(new OpenLayers.LonLat(p.gps_longitude + 0.00015 * Math.random(), p.gps_lattitude + 0.00015 * Math.random()).transform(fromProjection, toProjection))
               p.video = video
               marker.point = p
+              video.markers.push(marker)
 							marker.events.register("click", marker, function(mark) {
                 closePopup()
                 let overlay = document.getElementById('overlay')
