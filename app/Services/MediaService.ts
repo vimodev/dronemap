@@ -1,11 +1,14 @@
 import File from "App/Models/File";
 import Video from "App/Models/Video";
+import Image from "App/Models/Image"
 import os from 'os'
 import fs from 'fs'
 import path from 'path'
 import ffmpeg from 'fluent-ffmpeg'
 import VideoDataPoint from "App/Models/VideoDataPoint";
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import exif from 'exif-parser'
+import { DateTime } from "luxon";
 
 export default class MediaService {
 
@@ -21,9 +24,49 @@ export default class MediaService {
     let split = file.filePath.split('.')
     let extension = split[split.length - 1]
     if (MediaService.IMAGE_EXTENSIONS.includes(extension.toLowerCase())) {
-      // Planned
+      await this.handleNewImage(file)
     } else if (MediaService.VIDEO_EXTENSIONS.includes(extension.toLowerCase())) {
       await this.handleNewVideo(file)
+    }
+  }
+
+  public static async handleNewImage(file: File) {
+    const exifData = exif.create(fs.readFileSync(process.env.FILE_ROOT + file.filePath)).parse()
+    if (exifData == null || exifData.tags == undefined || exifData.tags.Make != 'DJI') {
+      console.log(`${file.filePath} not recognized as an image taken with DJI drone. Not analyzing it further.`)
+      return
+    }
+    console.log("Handling " + file.filePath)
+    try {
+      let image = new Image()
+      await image.related('file').associate(file)
+      const data = {
+        width: exifData.imageSize.width,
+        height: exifData.imageSize.height,
+        xDpi: exifData.tags.XResolution,
+        yDpi: exifData.tags.YResolution,
+        shotAt: DateTime
+                  .fromSeconds(exifData.tags.CreateDate),
+        gpsLongitude: exifData.tags.GPSLongitude,
+        gpsLatitude: exifData.tags.GPSLatitude,
+        fStop: exifData.tags.FNumber,
+        focalLength: exifData.tags.FocalLength,
+        exposureTime: exifData.tags.ExposureTime,
+        iso: exifData.tags.ISO,
+        aperture: exifData.tags.ApertureValue,
+        dzoom: exifData.tags.DigitalZoomRatio,
+        whiteBalance: exifData.tags.WhiteBalance,
+        ev: exifData.tags.ExposureCompensation,
+        shutterSpeed: exifData.tags.ShutterSpeedValue
+      }
+      for (const key in data) {
+        image[key] = data[key]
+      }
+      await image.save()
+    } catch (e) {
+      console.log(e)
+      console.log(`Something went wrong while parsing EXIF data from ${file.filePath}. Ignoring this file.`)
+      return
     }
   }
 
@@ -151,7 +194,11 @@ export default class MediaService {
   public static async isDjiVideo(file: File): Promise<boolean> {
     return await new Promise((resolve) => {
       // Probe for metadata
-      ffmpeg.ffprobe(process.env.FILE_ROOT + file.filePath, function(metadata) {
+      ffmpeg.ffprobe(process.env.FILE_ROOT + file.filePath, function(err, metadata) {
+        if (err != null) {
+          console.log(err)
+          return resolve(false)
+        }
         let hasSub = false
         // As long as one of the streams has a handler name tag of DJI.Subtitle
         for (const stream of metadata.streams) {

@@ -57,7 +57,11 @@ export default class Video extends BaseModel {
         video.extension = split[split.length - 1]
       }
       // FFMPEG metadata gathering
-      ffmpeg.ffprobe(process.env.FILE_ROOT + video.file.filePath, function(metadata) {
+      ffmpeg.ffprobe(process.env.FILE_ROOT + video.file.filePath, function(err, metadata) {
+        if (err != null) {
+          console.log(err)
+          video.file.delete()
+        }
         if (video.length == undefined) video.length = metadata.format.duration as string || '0'
         if (video.resolutionWidth == undefined) video.resolutionWidth = metadata.streams[0].width || 0
         if (video.resolutionHeight == undefined) video.resolutionHeight = metadata.streams[0].height || 0

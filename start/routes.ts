@@ -27,6 +27,7 @@ import VideoDataPoint from 'App/Models/VideoDataPoint'
 import fs from 'fs'
 import path from 'path'
 import MediaService from 'App/Services/MediaService'
+import Image from 'App/Models/Image'
 
 // Backend api stuff
 Route.group(() => {
@@ -46,6 +47,22 @@ Route.group(() => {
     }).prefix('/:videoId')
     Route.get('', async () => await Video.all())
   }).prefix('/videos')
+
+  Route.group(() => {
+    Route.group(() => {
+      Route.get('', async ({params, response}: HttpContextContract) => {
+        const img = await Image.find(params.imageId)
+        if (img == null) {
+          response.status(404)
+          return
+        }
+        await img.load('file')
+        return img
+      })
+      Route.get('/show', 'ImagesController.show')
+    }).prefix('/:imageId')
+    Route.get('', async () => await Image.all())
+  }).prefix('/images')
 
   // File stuff
   Route.group(() => {
