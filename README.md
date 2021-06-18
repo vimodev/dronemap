@@ -34,6 +34,7 @@ Watching a video after clicking the thumbnail
 - Improve marker visibility through coloring and positioning (mainly in high density areas)
 - Transcoded streaming, raw footage streaming is less than ideal for non-network streaming
 - Authentication for exposing service to internet
+- File / footage management page
 
 ## Running (development)
 
