@@ -18,17 +18,20 @@ Inspecting a single data point
 Watching a video after clicking the thumbnail
 ![Watching a video](readme_assets/video.png)
 
+Inspecting an image
+![Inspecting an image](readme_assets/image.png)
+
 ## Current features
 
 - Directory scanning
 - Automatic analysis and parsing of scanned files
 - Plotting of footage data points / images onto OSM or Satellite view
-- Inspecting data point information including camera settings
+- Inspecting data point / image information including camera settings
 - Opening and watching source footage at exact point of the data point in the footage
 
-## Potential future features
+## Potential future features (high to low priority)
 
-- Improved layout on data point inspection page
+- Improved layout on data point / image inspection pages
 - Filtering markers on the map based on data point attributes
 - Improve marker visibility through coloring and positioning (mainly in high density areas)
 - Transcoded streaming, raw footage streaming is less than ideal for non-network streaming
