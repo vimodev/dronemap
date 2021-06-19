@@ -61,7 +61,7 @@ Route.group(() => {
       })
       Route.get('/show', 'ImagesController.show')
     }).prefix('/:imageId')
-    Route.get('', async () => await Image.all())
+    Route.get('', async () => await Image.query().orderBy('shot_at', 'asc'))
   }).prefix('/images')
 
   // File stuff

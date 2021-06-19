@@ -154,9 +154,18 @@ function callSync() {
             var size = new OpenLayers.Size(20, 20)
             var offset = new OpenLayers.Pixel(-(size.w / 2), -(size.h / 2))
             var icon = new OpenLayers.Icon(OpenLayers.Util.getImageLocation("imageMarker.png"), size, offset)
+            let prev_image = null
             for (const image of images) {
+              if (prev_image != null
+                && Math.abs(prev_image.gps_longitude - image.gps_longitude) < 0.00001
+                && Math.abs(prev_image.gps_latitude - image.gps_latitude) < 0.00001) {
+                continue
+              }
                 let filter = `brightness(${Math.random() * 0.75 + 1})hue-rotate(${Math.random()}turn)saturate(4)`
-                marker = new OpenLayers.Marker(new OpenLayers.LonLat(image.gps_longitude, image.gps_latitude).transform(fromProjection, toProjection), icon.clone())
+                marker = new OpenLayers.Marker(
+                  new OpenLayers.LonLat(image.gps_longitude, image.gps_latitude).transform(fromProjection, toProjection),
+                  icon.clone()
+                )
                 image.marker = marker
                 marker.image = image
                 marker.events.register("click", marker, function(mark) {
@@ -169,11 +178,12 @@ function callSync() {
                     frame.id = "frame"
                     overlay.appendChild(frame)
                     overlay.style.display = "block"
-				})
+				        })
                 imageMarkers.addMarker(marker)
                 marker.inflate(0.85)
                 // Color
                 marker.icon.imageDiv.children[0].style.filter = filter
                 map.setCenter(marker.lonlat, 15)
+                prev_image = image
             }
         })
