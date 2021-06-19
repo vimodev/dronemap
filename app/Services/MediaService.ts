@@ -49,6 +49,7 @@ export default class MediaService {
                   .fromSeconds(exifData.tags.CreateDate),
         gpsLongitude: exifData.tags.GPSLongitude,
         gpsLatitude: exifData.tags.GPSLatitude,
+        gpsAltitude: exifData.tags.GPSAltitude,
         fStop: exifData.tags.FNumber,
         focalLength: exifData.tags.FocalLength,
         exposureTime: exifData.tags.ExposureTime,

@@ -15,6 +15,7 @@ export default class Images extends BaseSchema {
       table.dateTime('shot_at')
       table.float('gps_longitude', 12, 8)
       table.float('gps_latitude', 12, 8)
+      table.float('gps_altitude', 12, 8)
       table.float('f_stop')
       table.float('focal_length')
       table.float('exposure_time', 8, 4)

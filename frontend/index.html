@@ -8,6 +8,41 @@
 <button id="colorize" onclick="randomizeColors()">Re-colorize Markers</button>
 <button id="toolbutt" onclick="callSync()">Synchronize Database</button>
 <div id="filterMenu">
+  <b>Apply filters:</b>
+  <hr>
+  Show media type(s): <br>
+  <select id="imageVideoSelect" onchange="filterChanged()" class="filterInput">
+    <option value="both" selected="selected">Images & Videos</option>
+    <option value="images">Images</option>
+    <option value="videos">Videos</option>
+  </select>
+  <br>
+  Time: <br>
+  <select id="timeSelect" onchange="filterChanged()" class="filterInput">
+    <option value="always" selected="selected">Always</option>
+    <option value="day">Last 24 hours</option>
+    <option value="week">Last week</option>
+    <option value="month">Last month</option>
+    <option value="year">Last year</option>
+  </select>
+  <br>
+  Height (m): <br>
+  <select id="heightOperator" onchange="filterChanged()" class="filterInput">
+    <option value="none" selected="selected">Ignore</option>
+    <option value="ge">Greater or Equal</option>
+    <option value="le">Less or Equal</option>
+  </select> <br>
+  <input type="number" id="heightSelect" value="0" onchange="filterChanged()" class="filterInput">
+  <br>
+  <hr>
+  <b>Video only</b> <br>
+  Distance (m): <br>
+  <select id="distanceOperator" onchange="filterChanged()" class="filterInput">
+    <option value="none" selected="selected">Ignore</option>
+    <option value="ge">Greater or Equal</option>
+    <option value="le">Less or Equal</option>
+  </select> <br>
+  <input type="number" id="distanceSelect" value="0" onchange="filterChanged()" class="filterInput">
 </div>
 <div id="overlay">
   <button onclick="closePopup()" style="position:fixed;">Close</button>

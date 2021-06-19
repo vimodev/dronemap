@@ -35,6 +35,9 @@ export default class Image extends BaseModel {
   public gpsLatitude: number
 
   @column()
+  public gpsAltitude: number
+
+  @column()
   public fStop: number
 
   @column()

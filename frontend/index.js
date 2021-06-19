@@ -2,6 +2,82 @@ function callSync() {
     fetch("/api/sync")
   }
 
+  function setImageVideoFilter() {
+    const val = document.getElementById('imageVideoSelect').value
+    markers.display(val != 'images')
+    imageMarkers.display(val != 'videos')
+  }
+
+  function filterChanged() {
+    // Fetch filters
+    const mediaType = document.getElementById('imageVideoSelect').value
+    const time = document.getElementById('timeSelect').value
+    const heightOperator = document.getElementById('heightOperator').value
+    const height = document.getElementById('heightSelect').value
+    const distanceOperator = document.getElementById('distanceOperator').value
+    const distance = document.getElementById('distanceSelect').value
+    // Milliseconds in each time period, for ez lookup
+    const time_lookup = {'day': 86400000, 'week': 604800000, 'month': 2629800000, 'year': 31557600000}
+    const now = new Date()
+
+    // Filter all videos
+    loop: for (const marker of markers.markers) {
+      marker.display(true)
+      // Check media type
+      if (mediaType == 'images') {
+        marker.display(false)
+        continue loop
+      }
+      // Check time
+      if (time != 'always' && now.getTime() - (new Date(marker.point.video.date_shot)) > time_lookup[time]) {
+        marker.display(false)
+        continue loop
+      }
+      // Check height
+      if (heightOperator == 'ge' && marker.point.height < height) {
+        marker.display(false)
+        continue loop
+      }
+      if (heightOperator == 'le' && marker.point.height > height) {
+        marker.display(false)
+        continue loop
+      }
+      // Check distance
+      if (distanceOperator == 'ge' && marker.point.distance < distance) {
+        marker.display(false)
+        continue loop
+      }
+      if (distanceOperator == 'le' && marker.point.distance > distance) {
+        marker.display(false)
+        continue loop
+      }
+    }
+
+    // Filter all images
+    loop: for (const marker of imageMarkers.markers) {
+      marker.display(true)
+      // Check media type
+      if (mediaType == 'videos') {
+        marker.display(false)
+        continue loop
+      }
+      // Check time
+      if (time != 'always' && now.getTime() - (new Date(marker.image.shot_at)) > time_lookup[time]) {
+        marker.display(false)
+        continue loop
+      }
+      // Check height
+      if (heightOperator == 'ge' && marker.image.gps_altitude < height) {
+        marker.display(false)
+        continue loop
+      }
+      if (heightOperator == 'le' && marker.image.gps_altitude > height) {
+        marker.display(false)
+        continue loop
+      }
+    }
+  }
+
   function closePopup() {
     let el = document.getElementById("frame")
     if (el != null) el.remove()
