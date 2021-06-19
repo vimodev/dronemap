@@ -22,14 +22,13 @@ Watching a video after clicking the thumbnail
 
 - Directory scanning
 - Automatic analysis and parsing of scanned files
-- Plotting of footage data points onto OSM or Satellite view
+- Plotting of footage data points / images onto OSM or Satellite view
 - Inspecting data point information including camera settings
 - Opening and watching source footage at exact point of the data point in the footage
 
 ## Potential future features
 
 - Improved layout on data point inspection page
-- Include images from DJI, so not only video
 - Filtering markers on the map based on data point attributes
 - Improve marker visibility through coloring and positioning (mainly in high density areas)
 - Transcoded streaming, raw footage streaming is less than ideal for non-network streaming

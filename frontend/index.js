@@ -45,16 +45,18 @@ function callSync() {
     let osm = new OpenLayers.Layer.OSM()
     map.addLayer(osm);
     let isSat = false
-	  var markers = new OpenLayers.Layer.Markers( "Markers" );
+	var markers = new OpenLayers.Layer.Markers( "Markers" );
     map.addLayer(markers);
-	  var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+    var imageMarkers = new OpenLayers.Layer.Markers("Markers")
+    map.addLayer(imageMarkers)
+	var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
     var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
 
     // Dictionary of positions
     let positions = {}
     const position_step = 0.000033
 
-    // Fetch videos
+//    Fetch videos
 	fetch("/api/videos")
 		.then(function (response) {
 			return response.json()
@@ -141,3 +143,37 @@ function callSync() {
 			})
 			if (videos.length == 0) map.zoomToMaxExtent();
 		})
+
+    let fetchedImages = []
+    fetch('/api/images')
+        .then(function (response) {
+			return response.json()
+		})
+		.then(function (images) {
+            fetchedImages = images
+            var size = new OpenLayers.Size(20, 20)
+            var offset = new OpenLayers.Pixel(-(size.w / 2), -(size.h / 2))
+            var icon = new OpenLayers.Icon(OpenLayers.Util.getImageLocation("imageMarker.png"), size, offset)
+            for (const image of images) {
+                let filter = `brightness(${Math.random() * 0.75 + 1})hue-rotate(${Math.random()}turn)saturate(4)`
+                marker = new OpenLayers.Marker(new OpenLayers.LonLat(image.gps_longitude, image.gps_latitude).transform(fromProjection, toProjection), icon.clone())
+                image.marker = marker
+                marker.image = image
+                marker.events.register("click", marker, function(mark) {
+                    closePopup()
+                    let overlay = document.getElementById('overlay')
+                    let frame = document.createElement('iframe')
+                    frame.src = "image.html?image=" + mark.object.image.id
+                    frame.style.width = "100%"
+                    frame.style.height = "100%"
+                    frame.id = "frame"
+                    overlay.appendChild(frame)
+                    overlay.style.display = "block"
+				})
+                imageMarkers.addMarker(marker)
+                marker.inflate(0.85)
+                // Color
+                marker.icon.imageDiv.children[0].style.filter = filter
+                map.setCenter(marker.lonlat, 15)
+            }
+        })
