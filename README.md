@@ -3,9 +3,6 @@ A web-based application to explore your DJI drone footage on a map. Point the se
 
 ## Screenshots
 
-Example use
-![Example use](readme_assets/example.gif)
-
 Plain map view of data points
 ![Plain map view](readme_assets/map.png)
 
@@ -21,18 +18,21 @@ Watching a video after clicking the thumbnail
 Inspecting an image
 ![Inspecting an image](readme_assets/image.png)
 
+Example use (a bit outdated but the gist is the same)
+![Example use](readme_assets/example.gif)
+
 ## Current features
 
 - Directory scanning
 - Automatic analysis and parsing of scanned files
 - Plotting of footage data points / images onto OSM or Satellite view
+- Filtering plotted footage based on attributes
 - Inspecting data point / image information including camera settings
 - Opening and watching source footage at exact point of the data point in the footage
 
 ## Potential future features (high to low priority)
 
 - Improved layout on data point / image inspection pages
-- Filtering markers on the map based on data point attributes
 - Improve marker visibility through coloring and positioning (mainly in high density areas)
 - Transcoded streaming, raw footage streaming is less than ideal for non-network streaming
 - Authentication for exposing service to internet
