@@ -38,6 +38,13 @@ Example use (a bit outdated but the gist is the same)
 - Authentication for exposing service to internet
 - File / footage management page
 
+## Running (docker)
+
+1. Copy and adapt `docker-compose.yml`
+2. Run `docker-compose up -d`
+3. If the `dronemap` container's logs mention `ECONNREFUSED`, 
+please execute `node ace migration:run --force` manually in the container after the database container has fully started.
+
 ## Running (development)
 
 1. clone this repo
