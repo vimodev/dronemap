@@ -47,7 +47,8 @@ please execute `node ace migration:run --force` manually in the container after 
 
 ## Running (development)
 
-1. clone this repo
-2. Set up database
-3. Fill out .env and generate key with `node ace generate:key`
-4. `npm run dev`
+1. `apt update && apt install ffmpeg`
+2. `git clone git@github.com:vimodev/dronemap.git`
+3. Set up database
+4. Fill out .env and generate key with `node ace generate:key`
+5. `npm run dev`
