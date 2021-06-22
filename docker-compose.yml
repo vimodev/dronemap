@@ -14,12 +14,12 @@ services:
       - MYSQL_DB_NAME=dronemap
       - TZ=Europe/Amsterdam
     volumes:
-      - "/srv/ssdshare/footage_backup:/footage:ro"
+      - "/path/to/your/files:/footage:ro"
     depends_on:
       - dronemap_database
     networks:
       - dronemap-network
-          
+
   dronemap_database:
     image: mariadb:10
     environment:
@@ -34,7 +34,7 @@ services:
       - "3306:3306"
     restart: unless-stopped
 
-    
+
 networks:
     dronemap-network:
       driver: bridge
