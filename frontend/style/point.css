@@ -1,0 +1,37 @@
+
+.thumbnailContainer {
+  position:relative;
+}
+
+.imageContainer {
+  position: absolute;
+  margin:0 auto;
+  left:50%;
+  width: 30%;
+  margin-left: -15%;
+}
+
+.customTable {
+  width: 100%;
+  border-collapse: collapse;
+  border-width: 2px;
+  border-color: #595959;
+  border-style: solid;
+  color: #000000;
+}
+
+.customTable td, table.customTable th {
+  border-width: 2px;
+  border-color: #595959;
+  border-style: solid;
+  padding: 5px;
+}
+
+#thumbnail:hover {
+  cursor: pointer;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.49);
+}
+
+#thumbnail {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
