@@ -18,6 +18,7 @@ RUN mkdir /footage
 WORKDIR /app
 
 COPY build .
+COPY entry.sh .
 COPY frontend frontend
 
 RUN apt update && apt install -y ffmpeg
