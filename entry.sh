@@ -1,5 +1,5 @@
 #! /bin/bash
-sleep 5
+sleep 10
 node ace migration:run --force
 node server.js
 
