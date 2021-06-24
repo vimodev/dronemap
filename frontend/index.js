@@ -186,6 +186,7 @@ function handleDatapoints(video, points) {
     video.markers.push(marker)
     // Register click event
 		marker.events.register("click", marker, markerClicked)
+    marker.events.register("touchstart", marker, markerClicked)
     // Add the marker with smaller scale
 		markers.addMarker(marker)
     marker.inflate(0.85)
@@ -222,6 +223,7 @@ function handleImages(images) {
     image.marker = marker
     marker.image = image
     marker.events.register("click", marker, imageMarkerClicked)
+    marker.events.register("touchstart", marker, imageMarkerClicked)
     imageMarkers.addMarker(marker)
     marker.inflate(0.85)
     // Color
@@ -291,7 +293,13 @@ let sat = new OpenLayers.Layer.XYZ("Satellite", ["https://services.arcgisonline.
     numZoomLevels: 20,
     sphericalMercator: true
   })
-let osm = new OpenLayers.Layer.OSM()
+let osm = new OpenLayers.Layer.OSM(
+            "OpenStreetMap", [
+                "https://a.tile.openstreetmap.org/${z}/${x}/${y}.png",
+                "https://b.tile.openstreetmap.org/${z}/${x}/${y}.png",
+                "https://c.tile.openstreetmap.org/${z}/${x}/${y}.png"
+            ]
+)
 map.addLayer(osm);
 // Add video marker layer
 var markers = new OpenLayers.Layer.Markers( "Markers" );
