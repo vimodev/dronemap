@@ -1,4 +1,4 @@
-const exclude_attributes = ['created_at', 'updated_at', 'file']
+const exclude_attributes = ['created_at', 'updated_at', 'file', 'id', 'file_id']
 const file_exclude_attributes = ['id', 'created_at', 'updated_at']
 
 // Get the point id from the url params
