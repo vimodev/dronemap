@@ -1,6 +1,8 @@
 # DroneMap
 A web-based application to explore your DJI drone footage on a map. Point the server at the directory that contains your footage, press 'Synchronize Database' and the server will handle the rest.
 
+(Developed and tested with DJI Mini 2)
+
 ## Screenshots
 
 Plain map view of data points
@@ -18,7 +20,7 @@ Watching a video after clicking the thumbnail
 Inspecting an image
 ![Inspecting an image](readme_assets/image.png)
 
-Example use (a bit outdated but the gist is the same)
+Example use
 ![Example use](readme_assets/example.gif)
 
 ## Current features
@@ -30,7 +32,7 @@ Example use (a bit outdated but the gist is the same)
 - Inspecting data point / image information including camera settings
 - Opening and watching source footage at exact point of the data point in the footage
 
-## Potential future features (high to low priority)
+## Potential future features
 
 - Improved layout on data point / image inspection pages
 - Improve marker visibility through coloring and positioning (mainly in high density areas)
@@ -38,7 +40,7 @@ Example use (a bit outdated but the gist is the same)
 - Authentication for exposing service to internet
 - File / footage management page
 
-## Running (docker)
+## Running with Docker
 
 1. Copy and adapt `docker-compose.yml`
 2. Run `docker-compose up -d`
