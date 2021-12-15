@@ -8,7 +8,7 @@ export default class Files extends BaseSchema {
       table.uuid('id').primary()
       table.string('file_path').notNullable().unique()
       table.string('sha256').notNullable()
-      table.integer('size')
+      table.bigInteger('size')
       table.timestamps(true, true)
     })
   }
