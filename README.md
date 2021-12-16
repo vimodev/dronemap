@@ -40,6 +40,11 @@ Example use
 - Authentication for exposing service to internet
 - File / footage management page
 
+## Known issues (might or might not be working on these)
+
+- Thumbnail retrieval might be broken in docker deployment.
+- Parsing of particular videos might result in a fatal error (unknown what causes it atm)
+
 ## Running with Docker
 
 1. Copy and adapt `docker-compose.yml`
