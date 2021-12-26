@@ -1,3 +1,6 @@
+## Warning
+This repo is no longer maintained in favor of [vimodev/drone-atlas](https://github.com/vimodev/drone-atlas). That application is the same in functionality but much better in usability since it does not rely on a Node process in a Docker container but instead on Java. This makes it easier to deploy and faster to run.
+
 # DroneMap
 A web-based application to explore your DJI drone footage on a map. Point the server at the directory that contains your footage, press 'Synchronize Database' and the server will handle the rest.
 
